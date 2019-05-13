@@ -1,0 +1,170 @@
+
+<html>
+  <head>
+     <script src= "p5.min.js"></script>
+       <script src="p5.collide2d.min.js"></script>
+       <script src="p5.sound.min.js"></script>
+        <script src="p5.dom.min.js"></script>
+  <style>
+    body{
+      overflow:hidden;
+   padding:0;
+   margin:0;
+    }
+     #youlose{
+   position: absolute;
+  left: 500px;
+  top: 300px;
+color:white;
+ }
+  </style>
+  </head>
+  <body>
+    <script>
+      var w= window.innerWidth;
+      var h=window.innerHeight;
+      var bgimage;
+      var animal;
+      var bgmusic;
+      var user;
+      var power;
+      var loss;
+      var moana= new moana();
+      var crab= new crab();
+      var hook= new hook();
+       //var hitOne=false;
+       var d;// collision betweeen the user and the crab
+      var dTwo;
+      function preload(){
+        bgimage=loadImage("crablair.jpg");
+        bgimage.resize(w,h);
+         user =loadImage("moana.png");
+        bgmusic=loadSound("shiny.mp3");
+        animal= loadImage("tamatoa.png");
+        power=loadImage("hook.png");
+        bgmusic= loadSound("shiny.mp3");
+        loss= loadSound("youlose.mp3");
+      }
+      function setup(){
+        createCanvas(w,h);
+        bgimage.loadPixels();
+        animal.loadPixels();
+        power.loadPixels();
+        bgmusic.setVolume(1);
+        bgmusic.play();
+        bgmusic.loop();
+        
+      }
+      function draw(){
+        background(bgimage);
+        moana.show();
+        moana.move();
+        crab.show();
+        crab.update();
+        crab.lose();
+        hook.show();
+        hook.score();
+      }
+      function moana(){
+        this.x=0;
+        this.y=500;
+        this.width=150;
+        this.height=150;
+       
+           
+             this.show=function(){
+          image(user,this.x, this.y,this.width, this.height);
+           
+        }
+        
+        this.move= function(){
+            if(keyIsDown(65) && (this.x > 0)){//when a button is pressed moves left
+        this.x-=10;
+        
+      }
+    if (keyIsDown(68)&& (this.x< w-0)){//when d button is pressed moves right
+      this.x+=10;
+    }
+      if (keyIsDown(32)){
+        this.y-=10;
+      }
+      if (keyIsDown(83)){
+        this.y+=10;
+      }
+    }
+        
+    
+   
+      }
+    
+function crab(){
+ var x=0;
+ var speed=3;// speed of the crab
+  this.x=100;//starts off of the screen
+ this.y= Math.floor(Math.random()*h);// random point on the y axis
+  this.width=100;
+  this.height=100;
+  this.show=function(){
+    
+    image(animal,this.x,this.y,this.width,this.height);
+  }
+  this.update=function(){//makes the ball fall down
+ 
+ if (this.x > w){// if the crab is off the screen push it back left
+speed=-3;
+
+ }
+ if (this.x<0){// if the crab is off the screen push it back right
+   speed=3;
+ }
+this.x= this.x+speed;
+}
+this.lose= function(){
+    dTwo= dist(this.x, this.y, moana.x,moana.y);
+    if (dTwo<50){
+     noLoop();
+         document.getElementById("youlose").innerHTML="Try again?";
+        button= createButton("restart");
+        button.position(500,500);
+        button.mousePressed(reload);
+        loss.play();
+  }
+}
+
+  
+  }
+  
+ 
+function hook(){
+  this.x=Math.floor(Math.random()*w);
+  this.y=Math.floor(Math.random()*h);
+  this.width=100;
+  this.height=100;
+  this.count=0;
+  this.show=function(){
+    
+    image(power,this.x,this.y,this.width,this.height);
+  }
+ this.score=function(){
+   d= dist(this.x, this.y, moana.x, moana.y);
+   if (d<50){
+  nextpage();
+   }
+     
+   }
+ 
+  
+}
+function nextpage(){
+   location.href="gravity.html";
+}
+ function reload(){
+   location.href="levelone.html";
+   
+ }
+
+
+</script>
+<h1 id= "youlose"></h1>
+  </body>
+</html>
